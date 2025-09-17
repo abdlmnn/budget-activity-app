@@ -1,33 +1,25 @@
-import { Text, View, FlatList } from 'react-native';
+import { StyleSheet, Text, View, FlatList } from 'react-native';
 import React from 'react';
 
-export default function DisplayExpenses({ expenses }: any) {
+export default function DisplayBudget({ budget }: any) {
   return (
     <View style={{ flex: 1, backgroundColor: '#fff' }}>
-      <Text
-        style={{
-          fontSize: 20,
-          fontWeight: 'bold',
-          marginBottom: 15,
-          color: '#2196F3',
-        }}
-      >
-        Expenses History
+      <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 15 }}>
+        Budget History
       </Text>
 
       <FlatList
-        data={expenses}
+        data={budget}
         keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item }) => (
+        renderItem={({ item, index }) => (
           <View
             style={{
               flexDirection: 'row',
               justifyContent: 'space-between',
-              alignItems: 'center',
               padding: 15,
               marginBottom: 10,
               backgroundColor: '#f2f2f2',
-              borderRadius: 8,
+              borderRadius: 6,
               shadowColor: '#000',
               shadowOffset: { width: 0, height: 2 },
               shadowOpacity: 0.1,
@@ -35,18 +27,13 @@ export default function DisplayExpenses({ expenses }: any) {
               elevation: 2,
             }}
           >
-            <View style={{ flex: 1, marginRight: 10 }}>
-              <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#333' }}>
-                {item.name}
-              </Text>
-              <Text style={{ fontSize: 14, color: '#666', marginTop: 2 }}>
-                {item.description}
-              </Text>
-            </View>
+            <Text style={{ fontWeight: '600', color: '#333' }}>
+              {index + 1}.
+            </Text>
             <Text
               style={{ fontSize: 16, fontWeight: 'bold', color: '#2196F3' }}
             >
-              ₱ {item.amount}
+              ₱{item.amount}
             </Text>
           </View>
         )}
