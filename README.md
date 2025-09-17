@@ -1,97 +1,133 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+## Budget App Setup Guide
 
-# Getting Started
+Step 1: Start XAMPP
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+1. Open XAMPP.
+2. Start Apache and MySQL modules.
 
-## Step 1: Start Metro
+Step 2: Open phpMyAdmin
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+- Go to phpMyAdmin in XAMPP to manage your databases.
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+Step 3: Download PHP & Database Files
 
-```sh
-# Using npm
-npm start
+- Download the project files from Google Drive:
 
-# OR using Yarn
-yarn start
+[Download Link](https://drive.google.com/drive/folders/1EI8h9kb9-VleFNJjF-Ui8PpwCRvzpAOx)
+
+Step 4: Move Files to XAMPP
+
+- Copy the downloaded folder into:
+
+```bash
+xampp/htdocs/Budget
 ```
 
-## Step 2: Build and run your app
+Step 5: Import the Database
 
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
+1. Open phpMyAdmin.
+2. Import the database file budget.sql.
 
-### Android
+Step 6: Test PHP Connection
 
-```sh
-# Using npm
-npm run android
+1. Open your browser and go to:
 
-# OR using Yarn
-yarn android
+[Run](http://localhost/Budget/connect.php)
+
+- If you see an error your URL might be incorrect.
+  If the screen is white connection is working correctly.
+
+Step 7: Use Your Local IP Address
+
+- Replace localhost with your computer’s IP to access from other devices.
+
+Step 8: Find Your IP and Test
+
+1. Open Command Prompt and run:
+
+```nginx
+ipconfig
 ```
 
-### iOS
+2. Look for your IPv4 Address (e.g., 192.168.1.10).
+3. Test in the browser:
 
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
+[Run](http://192.168.xxxx/Budget/connect.php)
 
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
+- If the screen is white connection is working.
 
-```sh
-bundle install
+Step 9: Install Axios
+
+```bash
+npm install axios
 ```
 
-Then, and every time you update your native dependencies, run:
+Step 10: Fetch Budgets
 
-```sh
-bundle exec pod install
+```tsx
+import React, { useState } from 'react';
+import axios from 'axios';
+
+const [budget, setBudget] = useState([]);
+
+const fetchBudgets = async () => {
+  try {
+    const response = await axios.get(
+      'http://192.168.XXXX/Budget/get_budgets.php',
+    );
+    setBudget(response.data.budgets);
+  } catch (error) {
+    console.log('Error:', error);
+  }
+};
 ```
 
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
+Step 11: Add Budget
 
-```sh
-# Using npm
-npm run ios
+```tsx
+const [amount, setAmount] = useState('');
 
-# OR using Yarn
-yarn ios
+const handleBudget = async () => {
+  try {
+    const response = await axios.post(
+      'http://192.168.XXXX/Budget/add_budget.php',
+      {
+        amount,
+      },
+    );
+
+    setAmount('');
+
+    fetchBudgets();
+  } catch (error) {
+    console.log('Error:', error);
+  }
+};
 ```
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
+Step 11: Add Expenses
 
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+```tsx
+const [name, setName] = useState('');
+const [Description, setDescription] = useState('');
+const [amount, setAmount] = useState('');
 
-## Step 3: Modify your app
+const handleBudget = async () => {
+  try {
+    const response = await axios.post(
+      'http://192.168.XXXX/Budget/add_expenses.php',
+      {
+        name,
+        description,
+        amount,
+      },
+    );
 
-Now that you have successfully run the app, let's make changes!
-
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
-
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
-
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
-
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+    setName('');
+    setDescription('');
+    setAmount('');
+  } catch (error) {
+    console.log('Error:', error);
+  }
+};
+```
